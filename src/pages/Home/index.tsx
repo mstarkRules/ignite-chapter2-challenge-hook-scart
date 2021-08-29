@@ -23,11 +23,11 @@ interface CartItemsAmount {
 
 const Home = (): JSX.Element => {
   const [products, setProducts] = useState<ProductFormatted[]>([]);
-  // const { addProduct, cart } = useCart();
+  const { addProduct, cart } = useCart();
 
-  // const cartItemsAmount = cart.reduce((sumAmount, product) => {
-  //   // TODO
-  // }, {} as CartItemsAmount)
+  //const cartItemsAmount = cart.reduce((sumAmount, product) => {
+  //TODO;
+  // }, {} as CartItemsAmount);
   console.log(products);
   useEffect(() => {
     async function loadProducts() {
@@ -37,9 +37,20 @@ const Home = (): JSX.Element => {
     }
 
     loadProducts();
+
+    const shoe = {
+      amount: 1,
+      id: 12,
+      image:
+        "https://static.dafiti.com.br/p/Nike-T%C3%AAnis-Nike-Wmns-Revolution-5-Preto-0154-6507015-1-zoom.jpg",
+      title: "Tenis muito bonito",
+      price: 300,
+    };
   }, []);
 
-  function handleAddProduct(id: number) {}
+  function handleAddProduct(product: Product) {
+    addProduct({ ...product, amount: 1 });
+  }
 
   return (
     <ProductList>
@@ -52,7 +63,7 @@ const Home = (): JSX.Element => {
             <button
               type="button"
               data-testid="add-product-button"
-              onClick={() => handleAddProduct(product.id)}
+              onClick={() => handleAddProduct(product)}
             >
               <div data-testid="cart-product-quantity">
                 <MdAddShoppingCart size={16} color="#FFF" />
