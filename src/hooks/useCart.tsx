@@ -38,14 +38,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     } catch {
       console.log("houve erro na adição");
     }
-
-    console.log("adicionei um produto! Quantidade de prod: ", cart.length);
-    console.log("produtos no carrinho: ", cart);
   };
 
   const removeProduct = (productId: number) => {
+    let listaCart = [...cart];
     try {
-      // TODO
+      listaCart = cart.filter((p) => p.id != productId);
+      setCart(listaCart);
     } catch {
       // TODO
     }
@@ -56,7 +55,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     amount,
   }: UpdateProductAmount) => {
     try {
-      // TODO
+      let listaCart = [...cart];
+      listaCart.map((p) => (p.id !== productId ? p : (p.amount = amount)));
+      console.log("recebi o id:", productId);
+      console.log("a quantidade: ", amount);
+      console.log("a lista atualizada dos produtos no carrinho é: ", cart);
+      setCart(listaCart);
     } catch {
       // TODO
     }
