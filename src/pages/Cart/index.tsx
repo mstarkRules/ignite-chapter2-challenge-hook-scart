@@ -39,7 +39,7 @@ const Cart = (): JSX.Element => {
   function handleProductDecrement(productId: number, amount: number) {
     amount--;
     updateProductAmount({ productId, amount });
-    console.log(productId);
+    console.log("id: ", productId);
   }
 
   function handleRemoveProduct(productId: number) {
