@@ -21,19 +21,33 @@ interface Product {
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
-  const cartFormatted = cart.map((product) => ({}));
-  // const total =
-  //   formatPrice(
-  //     cart.reduce((sumTotal, product) => {
-  //       // TODO
-  //     }, 0)
-  //   )
+  const cartFormatted = cart.map((product) => {
+    let priceFormatted = formatPrice(product.price);
+    let subTotal = product.amount * product.price;
+    let subFormatted = formatPrice(subTotal);
+
+    return {
+      ...product,
+      subTotal: subTotal,
+      subFormatted: subFormatted,
+      priceFormatted: priceFormatted,
+    };
+  });
+
+  const total = formatPrice(
+    cartFormatted.reduce((sumTotal, product) => {
+      sumTotal += product.subTotal;
+
+      return sumTotal;
+    }, 0)
+  );
 
   function handleProductIncrement(productId: number, amount: number) {
     amount++;
     updateProductAmount({ productId, amount });
 
     console.log(productId);
+    console.log(cartFormatted);
   }
 
   function handleProductDecrement(productId: number, amount: number) {
@@ -59,14 +73,14 @@ const Cart = (): JSX.Element => {
           </tr>
         </thead>
         <tbody>
-          {cart.map((product) => (
+          {cartFormatted.map((product) => (
             <tr data-testid="product" key={product.id}>
               <td>
                 <img src={product.image} alt={product.title} />
               </td>
               <td>
                 <strong>{product.title}</strong>
-                <span>{product.price}</span>
+                <span>{product.priceFormatted}</span>
               </td>
               <td>
                 <div>
@@ -98,7 +112,7 @@ const Cart = (): JSX.Element => {
                 </div>
               </td>
               <td>
-                <strong>R$ 359,80</strong>
+                <strong>{product.subFormatted}</strong>
               </td>
               <td>
                 <button
@@ -119,7 +133,7 @@ const Cart = (): JSX.Element => {
 
         <Total>
           <span>TOTAL</span>
-          <strong>R$ 359,80</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
