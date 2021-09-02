@@ -1,7 +1,15 @@
+import { useEffect } from "react";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { api } from "../services/api";
 import { Product, Stock } from "../types";
+
+interface ProductFormatted {
+  id: number;
+  title: string;
+  price: number;
+  image: string;
+}
 
 interface CartProviderProps {
   children: ReactNode;
@@ -14,14 +22,17 @@ interface UpdateProductAmount {
 
 interface CartContextData {
   cart: Product[];
-  addProduct: (product: Product) => Promise<void>;
+  addProduct: (productId: number) => Promise<void>;
   removeProduct: (productId: number) => void;
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void;
+  setProductsContext: (products: ProductFormatted[]) => void;
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData);
 
 export function CartProvider({ children }: CartProviderProps): JSX.Element {
+  const [ProductList, setProductList] = useState<ProductFormatted[]>();
+
   const [cart, setCart] = useState<Product[]>(() => {
     // const storagedCart = Buscar dados do localStorage
 
@@ -32,9 +43,38 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     return [];
   });
 
-  const addProduct = async (product: Product) => {
+  useEffect(() => {
+    async function loadProducts() {
+      api.get("products").then((response) => {
+        setProductList(response.data);
+      });
+
+      loadProducts();
+
+      console.log("lista de produtos hook: " + ProductList);
+    }
+  }, []);
+
+  const addProduct = async (productId: number) => {
     try {
-      setCart([...cart, product]);
+      ProductList?.map((product) => {
+        let listaCart = [...cart];
+        if (product.id == productId) {
+          console.log(
+            "o produto de id: ",
+            productId,
+            "foi encontrado na lista de produtos"
+          );
+
+          for (var index in listaCart) {
+            if (listaCart[index].id == productId) {
+              console.log("encontrei no carrinho o id: ", productId);
+            } else {
+              console.log("não encontrei no carrinho o id: ", productId);
+            }
+          }
+        }
+      });
     } catch {
       console.log("houve erro na adição");
     }
@@ -48,6 +88,12 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     } catch {
       // TODO
     }
+  };
+
+  const setProductsContext = (products: ProductFormatted[]) => {
+    setProductList(products);
+
+    console.log("recebi a lista: ", products);
   };
 
   const updateProductAmount = async ({
@@ -68,7 +114,13 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
   return (
     <CartContext.Provider
-      value={{ cart, addProduct, removeProduct, updateProductAmount }}
+      value={{
+        cart,
+        addProduct,
+        removeProduct,
+        updateProductAmount,
+        setProductsContext,
+      }}
     >
       {children}
     </CartContext.Provider>
