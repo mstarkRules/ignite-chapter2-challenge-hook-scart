@@ -23,7 +23,7 @@ interface CartItemsAmount {
 
 const Home = (): JSX.Element => {
   const [products, setProducts] = useState<ProductFormatted[]>([]);
-  const { addProduct, cart, setProductsContext } = useCart();
+  const { addProduct, cart } = useCart();
 
   //const cartItemsAmount = cart.reduce((sumAmount, product) => {
   //TODO;
@@ -37,20 +37,7 @@ const Home = (): JSX.Element => {
     }
 
     loadProducts();
-
-    const shoe = {
-      amount: 1,
-      id: 12,
-      image:
-        "https://static.dafiti.com.br/p/Nike-T%C3%AAnis-Nike-Wmns-Revolution-5-Preto-0154-6507015-1-zoom.jpg",
-      title: "Tenis muito bonito",
-      price: 300,
-    };
   }, []);
-
-  useEffect(() => {
-    setProductsContext(products);
-  }, [products]);
 
   function handleAddProduct(productId: number) {
     addProduct(productId);

@@ -25,7 +25,6 @@ interface CartContextData {
   addProduct: (productId: number) => Promise<void>;
   removeProduct: (productId: number) => void;
   updateProductAmount: ({ productId, amount }: UpdateProductAmount) => void;
-  setProductsContext: (products: ProductFormatted[]) => void;
 }
 
 const CartContext = createContext<CartContextData>({} as CartContextData);
@@ -45,7 +44,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
   const addProduct = async (productId: number) => {
     try {
       const updatedCart = [...cart];
-
       const productExists = updatedCart.find(
         (product) => product.id === productId
       );
@@ -58,7 +56,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         toast.error("Quantidade solicitada fora de estoque");
         return;
       }
-
       if (productExists) {
         productExists.amount = amount;
       } else {
@@ -71,7 +68,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
 
         updatedCart.push(newProduct);
       }
-
       setCart(updatedCart);
       localStorage.setItem("@RocketShoes:cart", JSON.stringify(updatedCart));
     } catch {
@@ -87,12 +83,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     } catch {
       toast.error("Erro na remoção do produto");
     }
-  };
-
-  const setProductsContext = (products: ProductFormatted[]) => {
-    setProductList(products);
-
-    console.log("recebi a lista: ", products);
   };
 
   const updateProductAmount = async ({
@@ -118,7 +108,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
         addProduct,
         removeProduct,
         updateProductAmount,
-        setProductsContext,
       }}
     >
       {children}
