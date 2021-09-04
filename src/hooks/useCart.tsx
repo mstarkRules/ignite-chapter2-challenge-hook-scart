@@ -75,11 +75,32 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
   };
 
-  const removeProduct = (productId: number) => {
+  //usando filter para remover
+  /*   const removeProduct = (productId: number) => {
     let listaCart = [...cart];
     try {
       listaCart = cart.filter((p) => p.id != productId);
       setCart(listaCart);
+    } catch {
+      toast.error("Erro na remoção do produto");
+    }
+  }; */
+
+  //usando findIndex com slice para remover
+  const removeProduct = (productId: number) => {
+    let listaCart = [...cart];
+    try {
+      const productIndex = listaCart.findIndex(
+        (product) => productId === product.id
+      );
+
+      if (productIndex >= 0) {
+        listaCart.splice(productIndex, 1);
+        setCart(listaCart);
+        localStorage.setItem("@RocketShoes:cart", JSON.stringify(listaCart));
+      } else {
+        throw Error;
+      }
     } catch {
       toast.error("Erro na remoção do produto");
     }
