@@ -12,7 +12,7 @@
 
 <h2>✨ Layout do projeto</h2>
 <p align="center" >
-  <img alt="todo" src="https://github.com/mstarkRules/ignite-chapter2-challenge-hook-scart/blob/master/src/assets/images/rocketshoes-home.png" width="100%" style="max-width:100%;"></a>
+  <img alt="rocketshoes" src="https://github.com/mstarkRules/ignite-chapter2-challenge-hook-scart/blob/master/src/assets/images/rocketshoes-home.PNG" width="100%" style="max-width:100%;"></a>
 </p>
 <p align='center'>
     Tela da Aplicação web
