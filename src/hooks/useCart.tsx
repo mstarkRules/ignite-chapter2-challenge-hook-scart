@@ -37,7 +37,6 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     if (storagedCart) {
       return JSON.parse(storagedCart);
     }
-
     return [];
   });
 
@@ -86,7 +85,7 @@ export function CartProvider({ children }: CartProviderProps): JSX.Element {
     }
   }; */
 
-  //usando findIndex com slice para remover
+  //usando findIndex com splice para remover
   const removeProduct = (productId: number) => {
     let listaCart = [...cart];
     try {
